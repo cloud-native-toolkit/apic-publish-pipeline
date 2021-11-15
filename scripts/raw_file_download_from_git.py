@@ -43,7 +43,7 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
 def download_file_from_git_enterprise(git_base_url, git_branch, git_priv_token, file_path_to_download, filename_to_download, local_target_dir):
     try:
         curl_auth_header = "'Authorization: token " + git_priv_token + "'"
-        cmd = "curl -s -H " + curl_auth_header + " -H 'Accept: application/vnd.github.v3.raw' -L " + git_base_url.replace("https://github","https://raw.github",1) + git_branch + "/" + file_path_to_download + "/" + filename_to_download + ".yaml > " + local_target_dir + "/" + filename_to_download + ".yaml" + " && cat " + local_target_dir + "/" + filename_to_download + ".yaml"
+        cmd = "curl -s -H " + curl_auth_header + " -H 'Accept: application/vnd.github.v3.raw' -L " + git_base_url.replace("https://github","https://raw.githubusercontent",1) + git_branch + "/" + file_path_to_download + "/" + filename_to_download + ".yaml > " + local_target_dir + "/" + filename_to_download + ".yaml" + " && cat " + local_target_dir + "/" + filename_to_download + ".yaml"
         # print("my command: ", cmd)
         if not os.path.isdir(local_target_dir):
             os.makedirs(local_target_dir)
