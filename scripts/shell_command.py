@@ -29,9 +29,16 @@ def shcmd(cmd, ignore_error=False):
 """
 
 def shcmd(cmd, ignore_error=False):
-    # print("INFO " + "in " + FILE_NAME + " : shcmd() : cmd: ",cmd)
+    # Uncomment for debugging
+    # print("This is the command") 
+    # print(cmd)
     p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
     stdoutput = p.stdout.read().decode("utf-8")
+    # Uncomment for debugging
+    # print("This is the stdoutput")
+    # print(stdoutput)
+    # print("This is the stderror")
+    # print(p.stderr.read().decode("utf-8"))
     p.wait()
     if "404: Not Found" in stdoutput:
         cmd_res = {
