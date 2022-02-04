@@ -74,14 +74,14 @@ def publish_to_catalog_using_platform_api(apic_platform_base_url, apic_mgmt_prov
         
         product_file_name = product_file_name + '.yaml'
         
-        multiple_files = [('product',(product_file_name, open(env_local_target_dir + "/" + product_file_name, 'rb'), 'application/json'))]
-        var_apilist = get_api_name_from_product(env_local_target_dir, product_file_name)
+        multiple_files = [('product',(product_file_name, open(env_local_target_dir + "/Products/" + product_file_name, 'rb'), 'application/json'))]
+        var_apilist = get_api_name_from_product(env_local_target_dir + "/Products", product_file_name)
 
         if var_apilist:
             print(INFO + "Publish product:", product_file_name)
             print(INFO + "with APIs:", var_apilist)
             for apiname in var_apilist:
-                multiple_files.append(('openapi', (apiname + '.yaml', open(env_local_target_dir+ "/" + apiname + '.yaml', 'rb'), 'application/json')))
+                multiple_files.append(('openapi', (apiname + '.yaml', open(env_local_target_dir+ "/APIs/" + apiname + '.yaml', 'rb'), 'application/json')))
 
             reqheaders = {
                 "Accept" : "application/json",
@@ -112,7 +112,7 @@ def publish_to_catalog_using_platform_api(apic_platform_base_url, apic_mgmt_prov
 def orchestrate():
     try:
 
-        toolkit_credentials = utils.get_toolkit_credentials(os.environ["CONFIG_FILES_DIR"])
+        # toolkit_credentials = utils.get_toolkit_credentials(os.environ["CONFIG_FILES_DIR"])
         environment_config = utils.get_env_config(os.environ["CONFIG_FILES_DIR"])
 
         var_product_tuple = raw_file_download_from_git.get_all_file_names_from_git_enterprise(os.environ["GIT_PRODUCTS_APIS_URL"],
@@ -124,8 +124,8 @@ def orchestrate():
                                                                    os.environ["PROV_ORG_OWNER_USERNAME"],
                                                                    os.environ["PROV_ORG_OWNER_PASSWORD"],
                                                                    os.environ["PROV_ORG_REALM"],
-                                                                   toolkit_credentials["toolkit"]["client_id"],
-                                                                   toolkit_credentials["toolkit"]["client_secret"])
+                                                                   os.environ["TOOLKIT_CLIENT_ID"],
+                                                                   os.environ["TOOLKIT_CLIENT_SECRET"])
 
         if "access_token" in gbt_resp:
             var_bearer_token = gbt_resp['access_token']
@@ -188,7 +188,7 @@ These are the following APIs needed to delete products and APIs on a fine-graine
 
 Get BEARER_TOKEN
 ----------------
-BEARER_TOKEN = curl -k -X POST -d '{"username": "os.environ[PROV_ORG_OWNER_USERNAME]", "password": "os.environ[PROV_ORG_OWNER_PASSWORD]", "realm": "os.environ["PROV_ORG_REALM"]", "client_id": "toolkit_credentials["toolkit"]["client_id"]", "client_secret": "toolkit_credentials["toolkit"]["client_secret"]", "grant_type": "password"}' -H 'Content-Type: application/json' -H 'Accept: application/json' environment_config["APIC_PLATFORM_API_URL"] + "/api/token"
+BEARER_TOKEN = curl -k -X POST -d '{"username": "os.environ[PROV_ORG_OWNER_USERNAME]", "password": "os.environ[PROV_ORG_OWNER_PASSWORD]", "realm": "os.environ["PROV_ORG_REALM"]", "client_id": "os.environ["TOOLKIT_CLIENT_ID"]", "client_secret": "os.environ["TOOLKIT_CLIENT_SECRET"]", "grant_type": "password"}' -H 'Content-Type: application/json' -H 'Accept: application/json' environment_config["APIC_PLATFORM_API_URL"] + "/api/token"
 
 
 Get Catalogs

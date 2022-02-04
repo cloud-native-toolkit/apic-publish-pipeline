@@ -16,7 +16,7 @@ def download_api_yaml():
                                                                                             os.environ['GIT_PRODUCTS_PATH'])
 
         print(INFO + "Products to inspect for APIs:", var_product_tuple)
-        api_list = parse_apic_product_yaml_get_api_names.get_api_list_from_product(WORKING_DIR_BASIC, var_product_tuple)
+        api_list = parse_apic_product_yaml_get_api_names.get_api_list_from_product(WORKING_DIR_BASIC + "/Products", var_product_tuple)
 
         # print("API LIST", api_list)
 
@@ -30,7 +30,7 @@ def download_api_yaml():
                                                                                                     os.environ["GIT_PRIV_TOKEN"],
                                                                                                     os.environ['GIT_APIS_PATH'],
                                                                                                     api_file_name,
-                                                                                                    WORKING_DIR_BASIC)
+                                                                                                    WORKING_DIR_BASIC + "/APIs")
             if download_file_from_git_res["returncode"] == "200":
                 api_download_audit[api_file_name] = "SUCCESS"
             else:

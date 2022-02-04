@@ -4,7 +4,7 @@ import Audit_res
 
 FILE_NAME = "download_product_files_from_git.py"
 INFO = "[INFO]["+ FILE_NAME +"] - " 
-WORKING_DIR_BASIC = "../WORKSPACE"
+WORKING_DIR_BASIC = "../WORKSPACE/Products"
 
 def product_files_from_git():
     try:

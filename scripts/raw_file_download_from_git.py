@@ -27,7 +27,7 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
     try:
         url = git_base_url.replace("https://github","https://api.github",1).replace(".com/",".com/repos/",1) + "contents/" + file_path_to_download + "?ref=" + git_branch
         curl_auth_header = "'Authorization: token " + git_priv_token + "'"
-        cmd = "curl -H " + curl_auth_header + " '" + url + "'"
+        cmd = "curl -k -H " + curl_auth_header + " '" + url + "'"
         print(INFO + "Getting all Products names from: ", url)
         download_file_from_git_res = shell_command.shcmd(cmd)
         files=list(json.loads(download_file_from_git_res['stdout']))
@@ -43,8 +43,7 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
 def download_file_from_git_enterprise(git_base_url, git_branch, git_priv_token, file_path_to_download, filename_to_download, local_target_dir):
     try:
         curl_auth_header = "'Authorization: token " + git_priv_token + "'"
-        cmd = "curl -s -H " + curl_auth_header + " -H 'Accept: application/vnd.github.v3.raw' -L " + git_base_url.replace("https://github","https://raw.githubusercontent",1) + git_branch + "/" + file_path_to_download + "/" + filename_to_download + ".yaml > " + local_target_dir + "/" + filename_to_download + ".yaml" + " && cat " + local_target_dir + "/" + filename_to_download + ".yaml"
-        # print("my command: ", cmd)
+        cmd = "curl -s -k -H " + curl_auth_header + " -H 'Accept: application/vnd.github.v3.raw' -L " + git_base_url.replace("https://github","https://raw.githubusercontent",1) + git_branch + "/" + file_path_to_download + "/" + filename_to_download + ".yaml > " + local_target_dir + "/" + filename_to_download + ".yaml" + " && cat " + local_target_dir + "/" + filename_to_download + ".yaml"
         if not os.path.isdir(local_target_dir):
             os.makedirs(local_target_dir)
 

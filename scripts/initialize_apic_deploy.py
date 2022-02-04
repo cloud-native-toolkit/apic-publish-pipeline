@@ -14,6 +14,8 @@ def create_workspace_dir():
         print(INFO + "Workspace: ", WORKING_DIR_BASIC)
         if not os.path.isdir(WORKING_DIR_BASIC):
             os.makedirs(WORKING_DIR_BASIC)
+            os.makedirs(WORKING_DIR_BASIC + "/APIs")
+            os.makedirs(WORKING_DIR_BASIC + "/Products")
     except Exception as e:
          raise Exception("in " + FILE_NAME + " create_workspace_dir() : FAILED : " + repr(e))
 
