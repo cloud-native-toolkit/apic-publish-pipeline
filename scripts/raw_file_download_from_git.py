@@ -29,13 +29,15 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
         curl_auth_header = "'Authorization: token " + git_priv_token + "'"
         cmd = "curl -H " + curl_auth_header + " '" + url + "'"
         print(INFO + "Getting all Products names from: ", url)
-        download_file_from_git_res = shell_command.shcmd(cmd)
-        files=list(json.loads(download_file_from_git_res['stdout']))
+        # download_file_from_git_res = shell_command.shcmd(cmd)
+        download_file_from_git_res = shell_command.execute_request(url,git_priv_token)
+        # files=list(json.loads(download_file_from_git_res['stdout']))
+        files=list(download_file_from_git_res)
         for file in files:
             product_name=file['name']
             if '.yaml' in product_name:
                 list_of_product_names.append(product_name.replace(".yaml",""))
-        # print("in download_all_files_from_git_enterprise : list_of_product_names = ",list_of_product_names)
+        print("in download_all_files_from_git_enterprise : list_of_product_names = ",list_of_product_names)
         return list_of_product_names
     except Exception as e:
         raise Exception("ERROR in " + FILE_NAME + " : " + repr(e))
@@ -44,11 +46,14 @@ def download_file_from_git_enterprise(git_base_url, git_branch, git_priv_token, 
     try:
         curl_auth_header = "'Authorization: token " + git_priv_token + "'"
         cmd = "curl -s -H " + curl_auth_header + " -H 'Accept: application/vnd.github.v3.raw' -L " + git_base_url.replace("https://github","https://raw.githubusercontent",1) + git_branch + "/" + file_path_to_download + "/" + filename_to_download + ".yaml > " + local_target_dir + "/" + filename_to_download + ".yaml" + " && cat " + local_target_dir + "/" + filename_to_download + ".yaml"
+        url = git_base_url.replace("https://github","https://raw.githubusercontent",1) + git_branch + "/" + file_path_to_download + "/" + filename_to_download + ".yaml"
         # print("my command: ", cmd)
         if not os.path.isdir(local_target_dir):
             os.makedirs(local_target_dir)
 
-        download_file_from_git_res = shell_command.shcmd(cmd)
+        # download_file_from_git_res = shell_command.shcmd(cmd)
+        file_name=local_target_dir + "/" + filename_to_download + ".yaml"
+        download_file_from_git_res = shell_command.execute_request_download(url, git_priv_token, file_name)
         return download_file_from_git_res
     except Exception as e:
         raise Exception("ERROR in " + FILE_NAME + " : " + repr(e))

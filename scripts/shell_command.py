@@ -2,7 +2,7 @@
 #import argparse
 #import subprocess
 from subprocess import Popen, PIPE
-import os
+import os, requests
 
 FILE_NAME = "shell_command.py"
 
@@ -44,4 +44,24 @@ def shcmd(cmd, ignore_error=False):
             "stdout" : stdoutput
         }
     # print("INFO " + "in " + FILE_NAME + " : shcmd(): ", cmd_res)
+    return cmd_res
+
+def execute_request(url, token):
+    headers = {"Authorization": "token " + token}
+    response = requests.get(url, headers=headers)
+    if 200 == response.status_code:
+        return response.json()
+    else:
+        raise Exception("ERROR in shell_command.py in function execute_request: " + response.text)
+
+def execute_request_download(url, token, file_name):
+    headers = {"Authorization": "token " + token}
+    response = requests.get(url, headers=headers)
+
+    open(file_name, "wb").write(response.content)
+
+    if 200 != response.status_code:
+        cmd_res = {"returncode" : "404"}
+    else:
+        cmd_res = {"returncode" : "200"}
     return cmd_res
